@@ -2,6 +2,7 @@ package com.example.ttd.service;
 
 import com.example.ttd.domain.Membership;
 import com.example.ttd.domain.MembershipType;
+import com.example.ttd.dto.MembershipResponse;
 import com.example.ttd.exception.MembershipErrorResult;
 import com.example.ttd.exception.MembershipException;
 import com.example.ttd.repository.MembershipRepository;
@@ -14,7 +15,7 @@ public class MembershipService {
 
     private final MembershipRepository membershipRepository;
 
-    public Membership addMembership(final String userId, final MembershipType membershipType, final Integer point) {
+    public MembershipResponse addMembership(final String userId, final MembershipType membershipType, final Integer point) {
         final Membership result = membershipRepository.findByUserIdAndMembershipType(userId, membershipType);
         if (result != null) {
             throw new MembershipException(MembershipErrorResult.DUPLICATED_MEMBERSHIP_REGISTER);
@@ -26,6 +27,11 @@ public class MembershipService {
                 .membershipType(membershipType)
                 .build();
 
-        return membershipRepository.save(membership);
+        final Membership savedMembership = membershipRepository.save(membership);
+
+        return MembershipResponse.builder()
+                .id(savedMembership.getId())
+                .membershipType(savedMembership.getMembershipType())
+                .build();
     }
 }

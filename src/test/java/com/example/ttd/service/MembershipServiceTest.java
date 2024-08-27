@@ -2,6 +2,7 @@ package com.example.ttd.service;
 
 import com.example.ttd.domain.Membership;
 import com.example.ttd.domain.MembershipType;
+import com.example.ttd.dto.MembershipResponse;
 import com.example.ttd.exception.MembershipErrorResult;
 import com.example.ttd.exception.MembershipException;
 import com.example.ttd.repository.MembershipRepository;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,19 +59,19 @@ public class MembershipServiceTest {
         //then
         assertThat(result.getErrorResult()).isEqualTo(MembershipErrorResult.DUPLICATED_MEMBERSHIP_REGISTER);
     }
-    
+
     @Test
     public void 멤버십등록성공() {
         //given
         doReturn(null).when(membershipRepository).findByUserIdAndMembershipType(userId, membershipType);
         doReturn(membership()).when(membershipRepository).save(any(Membership.class)); //🤔
-        
+
         //when
-        final Membership result = target.addMembership(userId, membershipType, point);
+        final MembershipResponse result = target.addMembership(userId, membershipType, point);
 
         //then
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getMembershipType()).isEqualTo(MembershipType.NAVER);
+        assertThat(result.id()).isNotNull();
+        assertThat(result.membershipType()).isEqualTo(MembershipType.NAVER);
 
         //verify (membershipRepository를 통해 메소드가 호출되었는지를 검증하는 verify단계)
         verify(membershipRepository, times(1)).findByUserIdAndMembershipType(userId, membershipType);
