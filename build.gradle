@@ -32,7 +32,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-
+	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
 }
 
 tasks.named('test') {
